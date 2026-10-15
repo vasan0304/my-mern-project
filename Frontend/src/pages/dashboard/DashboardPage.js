@@ -16,12 +16,12 @@ function DashboardPage() {
 
   const cards = stats
     ? [
-        { label: "Total", value: stats.total, color: colors.accent, icon: "📋" },
-        { label: "Pending", value: stats.pending, color: colors.warning, icon: "⏳" },
-        { label: "Assigned", value: stats.assigned, color: "#a855f7", icon: "👤" },
-        { label: "In-Progress", value: stats.inProgress, color: "#06b6d4", icon: "⚙️" },
-        { label: "On Hold", value: stats.onHold, color: colors.textDim, icon: "⏸️" },
-        { label: "Completed", value: stats.completed, color: colors.success, icon: "✅" },
+        { label: "Total Complaints", value: stats.total, color: colors.accent, marker: "OVERVIEW" },
+        { label: "Pending", value: stats.pending, color: colors.warning, marker: "PENDING" },
+        { label: "Assigned", value: stats.assigned, color: "#a855f7", marker: "ASSIGNED" },
+        { label: "In-Progress", value: stats.inProgress, color: "#06b6d4", marker: "IN-PROGRESS" },
+        { label: "On Hold", value: stats.onHold, color: colors.textDim, marker: "ON HOLD" },
+        { label: "Completed", value: stats.completed, color: colors.success, marker: "RESOLVED" },
       ]
     : [];
 
@@ -49,14 +49,56 @@ function DashboardPage() {
                 border: `1px solid ${colors.border}`,
                 borderTop: `3px solid ${c.color}`,
                 borderRadius: 12,
-                padding: 20,
-                transition: "transform 0.2s",
+                padding: "20px 20px 18px",
+                transition: "all 0.2s ease",
                 cursor: "default",
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-2px)")}
-              onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateY(-2px)";
+                e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,0,0,0.3)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow = "none";
+              }}
             >
-              <div style={{ fontSize: 28, marginBottom: 8 }}>{c.icon}</div>
+              {/* Professional Status Marker */}
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
+                <div
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 6,
+                    padding: "3px 8px",
+                    borderRadius: 20,
+                    background: `${c.color}15`,
+                    border: `1px solid ${c.color}35`,
+                  }}
+                >
+                  <span
+                    style={{
+                      width: 6,
+                      height: 6,
+                      borderRadius: "50%",
+                      backgroundColor: c.color,
+                      boxShadow: `0 0 6px ${c.color}`,
+                      display: "inline-block",
+                    }}
+                  />
+                  <span
+                    style={{
+                      fontSize: 10,
+                      fontWeight: 700,
+                      color: c.color,
+                      letterSpacing: 0.6,
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    {c.marker}
+                  </span>
+                </div>
+              </div>
+
               <div
                 style={{ fontSize: 36, fontWeight: 800, color: c.color, lineHeight: 1 }}
               >
@@ -66,7 +108,7 @@ function DashboardPage() {
                 style={{
                   fontSize: 12,
                   color: colors.textDim,
-                  marginTop: 4,
+                  marginTop: 8,
                   fontWeight: 600,
                   textTransform: "uppercase",
                   letterSpacing: 0.5,

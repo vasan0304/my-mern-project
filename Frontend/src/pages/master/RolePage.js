@@ -7,8 +7,20 @@ function RolePage() {
       title="Role"
       apiPath="/roles"
       fetchFn={() => api("/roles")}
-      columns={[{ key: "roleName", label: "Role Name" }]}
-      formFields={[{ key: "roleName", label: "Role Name" }]}
+      columns={[
+        { key: "roleName", label: "Role Name" },
+        { key: "assignedUsers", label: "Person Name", render: (r) => r.assignedUsers || "None" },
+      ]}
+      formFields={[
+        { key: "roleName", label: "Role Name" },
+        {
+          key: "assignedUser",
+          label: "Assign Person",
+          type: "select",
+          fetchOptions: () => api("/users"),
+          optionLabel: "userName",
+        },
+      ]}
     />
   );
 }

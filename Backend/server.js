@@ -27,9 +27,12 @@ app.use('/api/reports', require('./routes/reports'));
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
-    console.log('MongoDB connected');
-    app.listen(process.env.PORT || 5000, () => {
-      console.log(`Server running on port ${process.env.PORT || 5000}`);
+    const PORT = process.env.PORT || 5050;
+    const server = app.listen(PORT, '0.0.0.0', () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+    server.on('error', (err) => {
+      console.error('Server listen error:', err);
     });
   })
   .catch(err => console.error('MongoDB connection error:', err));

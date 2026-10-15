@@ -50,27 +50,26 @@ function LoginPage() {
         <div style={{ textAlign: "center", marginBottom: 40 }}>
           <div
             style={{
-              width: 64,
-              height: 64,
-              background: colors.accent,
-              borderRadius: 18,
+              width: 58,
+              height: 58,
+              background: "linear-gradient(135deg, #4f7cff 0%, #2563eb 100%)",
+              borderRadius: 14,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontSize: 32,
+              fontWeight: 900,
+              fontSize: 20,
+              color: "#ffffff",
+              letterSpacing: 1,
               margin: "0 auto 16px",
+              boxShadow: "0 6px 20px rgba(79, 124, 255, 0.35)",
             }}
           >
-            🎫
-
-            
+            TMS
           </div>
           <h1 style={{ margin: 0, fontSize: 26, fontWeight: 900, color: colors.text }}>
             TMS Portal
           </h1>
-          <p style={{ margin: "6px 0 0", color: colors.textMuted, fontSize: 14 }}>
-            Ticket Management System
-          </p>
         </div>
 
         <Input
@@ -111,22 +110,6 @@ function LoginPage() {
         >
           {loading ? "Signing in..." : "Sign In"}
         </Btn>
-
-        <div
-          style={{
-            marginTop: 24,
-            padding: 16,
-            background: colors.accentLight,
-            borderRadius: 10,
-            fontSize: 12,
-            color: colors.textDim,
-          }}
-        >
-          <strong style={{ color: colors.accent }}>First time setup:</strong> Use Postman to POST
-          to{" "}
-          <code style={{ color: colors.text }}>/api/auth/register</code> to create a SuperAdmin
-          user.
-        </div>
       </div>
     </div>
   );

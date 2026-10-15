@@ -1,0 +1,21 @@
+{
+  "expo": {
+    "name": "TMS Mobile",
+    "slug": "tms-mobile",
+    "version": "1.0.0",
+    "orientation": "default",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#0d0f14",
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#0d0f14"
+      }
+    },
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}
