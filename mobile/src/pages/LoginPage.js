@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { StatusBar } from "expo-status-bar";
 import { useAuth } from "../context/AuthContext";
 import { Input, Btn } from "../components/UI";
 import { colors } from "../utils/theme";
 
 export default function LoginPage() {
   const { login } = useAuth();
+  const insets = useSafeAreaInsets();
   const [form, setForm] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -29,8 +32,17 @@ export default function LoginPage() {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : undefined}
-      style={styles.container}
+      style={[
+        styles.container,
+        {
+          paddingTop: Platform.OS === "web" ? 0 : insets.top,
+          paddingBottom: Platform.OS === "web" ? 0 : insets.bottom,
+          paddingLeft: Platform.OS === "web" ? 0 : insets.left,
+          paddingRight: Platform.OS === "web" ? 0 : insets.right,
+        },
+      ]}
     >
+      <StatusBar style="light" />
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.card}>
           {/* Logo Badge */}

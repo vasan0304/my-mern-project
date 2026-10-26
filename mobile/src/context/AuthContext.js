@@ -48,8 +48,16 @@ export function AuthProvider({ children }) {
     setUser(null);
   };
 
-  const isSuperAdmin = user?.role?.roleName?.toLowerCase() === "superadmin";
-  const isUser = user?.role?.roleName?.toLowerCase() === "user";
+  const updateUser = async (updatedFields) => {
+    const updated = { ...user, ...updatedFields };
+    await AsyncStorage.setItem("tms_user", JSON.stringify(updated));
+    setUser(updated);
+    return updated;
+  };
+
+  const userRoleStr = (user?.role?.roleName || (typeof user?.role === "string" ? user.role : "") || "").toLowerCase();
+  const isSuperAdmin = userRoleStr === "superadmin";
+  const isUser = userRoleStr === "user";
   const isStaff = !!user && !isSuperAdmin && !isUser;
 
   return (
@@ -59,6 +67,7 @@ export function AuthProvider({ children }) {
         loading,
         login,
         logout,
+        updateUser,
         isSuperAdmin,
         isUser,
         isStaff,

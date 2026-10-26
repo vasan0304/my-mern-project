@@ -7,12 +7,13 @@ import { colors } from "../utils/theme";
 export const NAV_ITEMS = [
   { id: "dashboard", label: "Dashboard", markerColor: "#4f7cff", all: true },
   { id: "complaints", label: "Complaints", markerColor: "#f59e0b", all: true },
+  { id: "profile", label: "My Profile", markerColor: "#ec4899", all: true },
   { id: "departments", label: "Departments", markerColor: "#8b5cf6", superAdmin: true },
   { id: "programmes", label: "Programmes", markerColor: "#06b6d4", superAdmin: true },
   { id: "blocks", label: "Blocks", markerColor: "#10b981", superAdmin: true },
   { id: "rooms", label: "Rooms", markerColor: "#6366f1", superAdmin: true },
-  { id: "roles", label: "Roles", markerColor: "#ec4899", superAdmin: true },
-  { id: "users", label: "Users", markerColor: "#38bdf8", superAdmin: true },
+  { id: "roles", label: "Roles", markerColor: "#38bdf8", superAdmin: true },
+  { id: "users", label: "Users", markerColor: "#10b981", superAdmin: true },
   { id: "reports", label: "Reports", markerColor: "#a855f7", superAdmin: true },
 ];
 
@@ -27,9 +28,9 @@ export default function Sidebar({ active, setActive, onClose }) {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, onClose && { width: "100%" }]}>
       {/* Jobie Brand Header */}
-      <View style={styles.header}>
+      <View style={[styles.header, onClose && { paddingTop: 16, paddingBottom: 16 }]}>
         <View style={styles.logoBadge}>
           <Text style={styles.logoBadgeText}>T</Text>
         </View>
@@ -38,7 +39,11 @@ export default function Sidebar({ active, setActive, onClose }) {
           <Text style={styles.brandSubtitle}>Admin Dashboard</Text>
         </View>
         {onClose && (
-          <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
+          <TouchableOpacity
+            onPress={onClose}
+            style={styles.closeBtn}
+            hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+          >
             <Text style={styles.closeBtnText}>✕</Text>
           </TouchableOpacity>
         )}
@@ -89,21 +94,26 @@ export default function Sidebar({ active, setActive, onClose }) {
 
       {/* Jobie-style User Footer */}
       <View style={styles.footer}>
-        <View style={styles.userCard}>
+        <TouchableOpacity
+          style={styles.userCard}
+          activeOpacity={0.7}
+          onPress={() => handleSelect("profile")}
+        >
           <View style={styles.avatar}>
             <Text style={styles.avatarText}>
-              {user?.userName?.[0]?.toUpperCase() || "U"}
+              {(user?.userName || user?.name)?.[0]?.toUpperCase() || "U"}
             </Text>
           </View>
           <View style={styles.userInfo}>
             <Text style={styles.userName} numberOfLines={1}>
-              {user?.userName || "User"}
+              {user?.userName || user?.name || "User"}
             </Text>
             <Text style={styles.userRole} numberOfLines={1}>
-              {user?.role?.roleName || "Staff"}
+              {user?.role?.roleName || (typeof user?.role === "string" ? user.role : "") || "Staff"}
             </Text>
           </View>
-        </View>
+          <Text style={{ color: colors.textMuted, fontSize: 18, marginLeft: 4 }}>›</Text>
+        </TouchableOpacity>
 
         <Btn
           variant="ghost"

@@ -9,7 +9,9 @@ import {
   ScrollView,
   StyleSheet,
   Dimensions,
+  Platform,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { colors, STATUS_COLORS } from "../utils/theme";
 
 // ─── BADGE ─────────────────────────────────────────────────────────────────────
@@ -301,17 +303,39 @@ export function Btn({ children, onPress, variant = "primary", size = "md", style
 
 // ─── MODAL ─────────────────────────────────────────────────────────────────────
 export function Modal({ title, visible, onClose, children }) {
+  const insets = useSafeAreaInsets();
+
   return (
-    <RNModal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
-      <View style={styles.modalBackdrop}>
+    <RNModal
+      visible={visible}
+      transparent
+      animationType="fade"
+      statusBarTranslucent={true}
+      onRequestClose={onClose}
+    >
+      <View
+        style={[
+          styles.modalBackdrop,
+          {
+            paddingTop: Platform.OS === "web" ? 20 : Math.max(insets.top + 16, 20),
+            paddingBottom: Platform.OS === "web" ? 20 : Math.max(insets.bottom + 16, 20),
+            paddingLeft: Platform.OS === "web" ? 20 : Math.max(insets.left + 16, 20),
+            paddingRight: Platform.OS === "web" ? 20 : Math.max(insets.right + 16, 20),
+          },
+        ]}
+      >
         <View style={styles.modalContent}>
           <View style={styles.modalHeader}>
             <Text style={styles.modalTitle}>{title}</Text>
-            <TouchableOpacity onPress={onClose} style={styles.modalCloseBtn}>
+            <TouchableOpacity
+              onPress={onClose}
+              style={styles.modalCloseBtn}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            >
               <Text style={styles.modalCloseText}>✕</Text>
             </TouchableOpacity>
           </View>
-          <ScrollView showsVerticalScrollIndicator={false} style={{ maxHeight: 500 }}>
+          <ScrollView showsVerticalScrollIndicator={false} style={{ maxHeight: 520 }}>
             {children}
           </ScrollView>
         </View>

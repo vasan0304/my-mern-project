@@ -1,40 +1,63 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Platform } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAuth } from "../context/AuthContext";
 import { colors } from "../utils/theme";
 
-export default function Header({ title, onMenuPress, isMobile }) {
+export default function Header({ title, onMenuPress, isMobile, onProfilePress }) {
   const { user } = useAuth();
+  const insets = useSafeAreaInsets();
+
+  const topInset = Platform.OS === "web" ? 0 : insets.top;
+  const displayName = user?.userName || user?.name || "User";
+  const displayRole = user?.role?.roleName || (typeof user?.role === "string" ? user.role : "") || "Staff";
 
   return (
-    <View style={styles.headerContainer}>
+    <View
+      style={[
+        styles.headerContainer,
+        {
+          paddingTop: topInset > 0 ? topInset + 8 : 12,
+        },
+      ]}
+    >
       {/* Left: Menu Btn & Page Title */}
       <View style={styles.leftSection}>
         {isMobile && (
-          <TouchableOpacity onPress={onMenuPress} style={styles.menuBtn} activeOpacity={0.7}>
+          <TouchableOpacity
+            onPress={onMenuPress}
+            style={styles.menuBtn}
+            activeOpacity={0.7}
+            hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+          >
             <Text style={styles.menuIcon}>☰</Text>
           </TouchableOpacity>
         )}
         <Text style={styles.pageTitle} numberOfLines={1}>{title}</Text>
       </View>
 
-      {/* Right: User Pill */}
+      {/* Right: Clickable User Pill leading to Profile section */}
       <View style={styles.rightSection}>
-        <View style={styles.userPill}>
+        <TouchableOpacity
+          onPress={onProfilePress}
+          activeOpacity={0.7}
+          style={styles.userPill}
+          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+        >
           <View style={styles.userAvatar}>
             <Text style={styles.userAvatarText}>
-              {user?.userName?.[0]?.toUpperCase() || "U"}
+              {displayName[0]?.toUpperCase() || "U"}
             </Text>
           </View>
           <View style={styles.userTextCol}>
             <Text style={styles.userPillName} numberOfLines={1}>
-              {user?.userName || "User"}
+              {displayName}
             </Text>
             <Text style={styles.userPillRole} numberOfLines={1}>
-              {user?.role?.roleName || "Staff"}
+              {displayRole}
             </Text>
           </View>
-        </View>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -47,7 +70,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
     paddingHorizontal: 20,
-    paddingVertical: 10,
+    paddingBottom: 12,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",

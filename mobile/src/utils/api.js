@@ -1,9 +1,11 @@
 import { Platform } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Constants from "expo-constants";
 
 // Default host based on platform
 export const getApiBaseUrl = () => {
-  if (Platform.OS === "web" || typeof window !== "undefined") {
+  // Web browser only
+  if (Platform.OS === "web") {
     if (typeof window !== "undefined" && window.location) {
       const port = window.location.port;
       // In production behind Nginx (port 80/443), use relative /api reverse proxy
@@ -15,8 +17,9 @@ export const getApiBaseUrl = () => {
     }
     return "/api";
   }
-  // Local network IP of host machine for physical devices & Expo Go
-  return "http://10.158.53.143:5050/api";
+
+  // Physical mobile device (iOS / Android Expo Go): connect to live AWS backend
+  return "http://3.111.57.26/api";
 };
 
 const api = async (endpoint, options = {}) => {
@@ -31,6 +34,7 @@ const api = async (endpoint, options = {}) => {
   const baseUrl = customBase || getApiBaseUrl();
 
   const url = `${baseUrl}${endpoint}`;
+  console.log(`[TMS API] Calling ${url}`);
 
   const res = await fetch(url, {
     headers: {
